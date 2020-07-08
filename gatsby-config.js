@@ -13,6 +13,14 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    {
+      resolve: "gatsby-source-graphql",
+      options: {
+        typeName: "AVORG",
+        fieldName: "avorg",
+        url: "http://audioversegraphql-env.eba-hfpuuq23.us-west-1.elasticbeanstalk.com/graphql"
+      }
+    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
