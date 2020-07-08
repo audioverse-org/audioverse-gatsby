@@ -1,0 +1,11 @@
+version: "2"
+services:
+  gatsby:
+    build: .
+    user: node
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - "8001:8000"
+    command: "gatsby develop --host 0.0.0.0"
