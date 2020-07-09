@@ -104,6 +104,7 @@ Looking for more guidance? Full documentation for Gatsby lives [on the website](
 chmod +x in.sh && ./in.sh npm install
 docker-compose up
 open http://localhost:8001
+open http://localhost:8001/__graphql
 ```
 
 ### Commands
