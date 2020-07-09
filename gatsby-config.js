@@ -32,7 +32,13 @@ module.exports = {
                 background_color: `#be2200`,
                 theme_color: `#be2200`,
                 display: `minimal-ui`,
-                icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+                icon: `src/images/audioverse-icon.png`, // This path is relative to the root of the site.
+                icon_options: {
+                    // For all the options available, please see:
+                    // https://developer.mozilla.org/en-US/docs/Web/Manifest
+                    // https://w3c.github.io/manifest/#purpose-member
+                    purpose: `maskable`,
+                },
             },
         },
         // this (optional) plugin enables Progressive Web App + Offline functionality
