@@ -40,8 +40,6 @@ query {
     const sermons = result.data.avorg.sermons
 
     if (sermons.nodes) {
-        console.log(sermons.nodes.length)
-
         sermons.nodes.forEach((node) => {
             createPage({
                 path: `english/sermons/recordings/${node.id}`,
@@ -51,8 +49,6 @@ query {
                 }
             })
         })
-    } else {
-        console.log('No nodes')
     }
 
     if (sermons.pageInfo.hasNextPage) {
@@ -62,8 +58,6 @@ query {
 
 exports.createPages = async ({graphql, actions}) => {
     const { createPage } = actions
-
-    console.log('Creating pages')
 
     await createSermons(graphql, createPage)
 }
