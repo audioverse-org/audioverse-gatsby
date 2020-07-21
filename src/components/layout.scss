@@ -1,3 +1,15 @@
+$gray-night: #1c1c1d;
+$gray-dark: #242426;
+$gray-mid: #262627;
+$gray-light: #dbdbdb;
+$gray-bleached: #e5e5e5;
+
+
+.organism-header {
+  background-color: $gray-dark;
+}
+
+
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;

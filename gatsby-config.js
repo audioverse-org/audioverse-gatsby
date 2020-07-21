@@ -1,7 +1,7 @@
 module.exports = {
     siteMetadata: {
         title: `AudioVerse`,
-        description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+        description: `A website dedicated to spreading God's word through free sermon audio and much more.`,
         author: `@gatsbyjs`,
     },
     plugins: [

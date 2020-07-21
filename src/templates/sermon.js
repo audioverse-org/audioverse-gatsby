@@ -17,11 +17,11 @@ export default function Sermon({ pageContext }) {
 
                 {sermon.recordingDate ? <p>{(new Date(sermon.recordingDate)).toLocaleDateString()}</p> : null}
 
-                {sermon.description ? <div dangerouslySetInnerHTML={{__html: sermon.description}} /> : null}
-
                 {sermon.mediaFiles.map(file => {
                     return <div><audio controls src={file.url}>Your browser doesn't support this player.</audio></div>
                 })}
+
+                {sermon.description ? <div dangerouslySetInnerHTML={{__html: sermon.description}} /> : null}
             </div>
         </Layout>
     )
