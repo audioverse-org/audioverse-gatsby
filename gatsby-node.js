@@ -73,9 +73,9 @@ const createSermons = async (graphql, createPage) => {
     const languages = {
         'ENGLISH': 'english/sermons/recordings/',
         'SPANISH': 'espanol/sermones/grabaciones/',
+        'FRENCH': 'francais/predications/enregistrements/',
         // TODO: Translate route:
-        'FRENCH': 'deutsch/sermons/recordings/',
-        'GERMAN': 'francais/predications/enregistrements/',
+        'GERMAN': 'deutsch/sermons/recordings/',
         // TODO: Translate route:
         'CHINESE': 'zhongwen/sermons/recordings/',
         // TODO: Translate route:
