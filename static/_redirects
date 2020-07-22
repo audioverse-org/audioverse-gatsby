@@ -1,0 +1,7 @@
+/english/sermons/recordings/:id/:slug               /english/sermons/recordings/:id             200
+/espanol/sermones/grabaciones/:id/:slug             /espanol/sermones/grabaciones/:id           200
+/deutsch/sermons/recordings/:id/:slug               /deutsch/sermons/recordings/:id             200
+/francais/predications/enregistrements/:id/:slug    /francais/predications/enregistrements/:id  200
+/zhongwen/sermons/recordings/:id/:slug              /zhongwen/sermons/recordings/:id            200
+/ja/sermons/recordings/:id/:slug                    /ja/sermons/recordings/:id                  200
+/ru/sermons/recordings/:id/:slug                    /ru/sermons/recordings/:id                  200

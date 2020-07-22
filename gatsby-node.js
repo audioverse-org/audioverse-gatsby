@@ -6,13 +6,13 @@
 
 const path = require(`path`)
 
-const createSermons = async (graphql, createPage, after) => {
-    after = after ? after : '';
+const getSermons = async (graphql, language = "ENGLISH") => {
+    const run = async (after = '', nodes = []) => {
 
-    const result = await graphql(`
+        const result = await graphql(`
 query {
   avorg {
-    sermons(language: ENGLISH, first: 50, after: "${after}") {
+    sermons(language: ${language}, first: 50, after: "${after}") {
       nodes {
         title
         id
@@ -37,27 +37,58 @@ query {
 }
     `)
 
-    const sermons = result.data.avorg.sermons
+        const sermons = result.data.avorg.sermons
 
-    if (sermons.nodes) {
-        sermons.nodes.forEach((node) => {
-            createPage({
-                path: `english/sermons/recordings/${node.id}`,
-                component: path.resolve(`./src/templates/sermon.js`),
-                context: {
-                    node: node
-                }
-            })
-        })
+        nodes = nodes.concat(sermons.nodes)
+
+        if (sermons.pageInfo.hasNextPage) {
+            return await run(sermons.pageInfo.endCursor, nodes)
+        } else {
+            return nodes
+        }
     }
 
-    if (sermons.pageInfo.hasNextPage) {
-        await createSermons(graphql, createPage, sermons.pageInfo.endCursor)
+    return await run()
+}
+
+const createSermon = async (createPage, node, pathPrefix) => {
+    await createPage({
+        path: `${pathPrefix}${node.id}`,
+        component: path.resolve(`./src/templates/sermon.js`),
+        context: {node}
+    })
+}
+
+const createLanguageSermons = async (graphql, createPage, pathPrefix, language) => {
+    const sermons = await getSermons(graphql, language)
+
+    for (const node of sermons) {
+        await createSermon(createPage, node, pathPrefix)
     }
 }
 
+const createSermons = async (graphql, createPage) => {
+    const languages = {
+        'ENGLISH': 'english/sermons/recordings/',
+        'SPANISH': 'espanol/sermones/grabaciones/',
+        'FRENCH': 'francais/predications/enregistrements/',
+        // TODO: Translate route:
+        'GERMAN': 'deutsch/sermons/recordings/',
+        // TODO: Translate route:
+        'CHINESE': 'zhongwen/sermons/recordings/',
+        // TODO: Translate route:
+        'JAPANESE': 'ja/sermons/recordings/',
+        // TODO: Translate route:
+        'RUSSIAN': 'ru/sermons/recordings/',
+    }
+
+    await Promise.all(Object.keys(languages).map(async (language) => {
+        await createLanguageSermons(graphql, createPage, languages[language], language)
+    }))
+}
+
 exports.createPages = async ({graphql, actions}) => {
-    const { createPage } = actions
+    const {createPage} = actions
 
     await createSermons(graphql, createPage)
 }

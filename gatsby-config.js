@@ -1,7 +1,7 @@
 module.exports = {
     siteMetadata: {
         title: `AudioVerse`,
-        description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+        description: `A website dedicated to spreading God's word through free sermon audio and much more.`,
         author: `@gatsbyjs`,
     },
     plugins: [
@@ -18,7 +18,7 @@ module.exports = {
             options: {
                 typeName: "AVORG",
                 fieldName: "avorg",
-                url: "http://audioversegraphql-env.eba-hfpuuq23.us-west-1.elasticbeanstalk.com/graphql"
+                url: "https://graphql.audioverse.org/graphql"
             }
         },
         `gatsby-transformer-sharp`,
