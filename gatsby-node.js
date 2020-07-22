@@ -62,11 +62,9 @@ const createSermon = async (createPage, node, pathPrefix) => {
 const createLanguageSermons = async (graphql, createPage, pathPrefix, language) => {
     const sermons = await getSermons(graphql, language)
 
-    if (!sermons) return;
-
-    await Promise.all(sermons.map(async (node) => {
+    for (const node of sermons) {
         await createSermon(createPage, node, pathPrefix)
-    }))
+    }
 }
 
 const createSermons = async (graphql, createPage) => {
