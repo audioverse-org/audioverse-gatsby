@@ -5,7 +5,7 @@
 ```bash
 npm install
 brew install watchman
-npm test
+npm run test:watch
 ```
 
 ## Docker
