@@ -7,13 +7,17 @@ export default function Sermon({ pageContext }) {
     return (
         <Layout>
             <div className={'template-sermon'}>
-                <h1>{sermon.title}</h1>
-
-                <ul className={'template-sermon__speakers'}>
-                    {sermon.presenters.map(speaker => {
-                        return <li>{speaker.name}</li>
-                    })}
-                </ul>
+                <div className="template-sermon__meta">
+                    <img src={sermon.presenters[0].photoWithFallback.url} alt={sermon.presenters[0].name}/>
+                    <div className="template-sermon__metaText">
+                        <h1>{sermon.title}</h1>
+                        <ul className={'template-sermon__speakers'}>
+                            {sermon.presenters.map(speaker => {
+                                return <li>{speaker.name}</li>
+                            })}
+                        </ul>
+                    </div>
+                </div>
 
                 {sermon.recordingDate ? <p>{(new Date(sermon.recordingDate)).toLocaleDateString()}</p> : null}
 

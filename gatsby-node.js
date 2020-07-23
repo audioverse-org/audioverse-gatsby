@@ -18,8 +18,8 @@ query {
         id
         presenters {
           name
-          photo {
-            url(size: 10)
+          photoWithFallback {
+            url(size: 50)
           }
         }
         mediaFiles {

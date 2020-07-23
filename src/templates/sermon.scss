@@ -1,9 +1,20 @@
 .template-sermon {
-    h1 {
-        margin-bottom: 0.25rem;
+    .template-sermon__meta {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        img {
+            flex: 0 0 50px;
+            margin-right: .75rem;
+            border-radius: 100%;
+        }
+        h1 {
+            margin-bottom: 0;
+        }
     }
     .template-sermon__speakers  {
         margin-left: 0;
+        margin-bottom: 0;
         li {
             display: inline;
             list-style-type: none;
