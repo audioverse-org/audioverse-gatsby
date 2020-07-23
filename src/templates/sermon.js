@@ -3,17 +3,25 @@ import Layout from "../components/layout"
 import './sermon.css'
 
 export default function Sermon({ pageContext }) {
-    const sermon = pageContext.node
+    const sermon = pageContext.node,
+        firstPresenter = sermon.presenters[0],
+        imageSrc = firstPresenter && firstPresenter.photoWithFallback.url,
+        imageAlt = firstPresenter && firstPresenter.name;
+
     return (
         <Layout>
             <div className={'template-sermon'}>
-                <h1>{sermon.title}</h1>
-
-                <ul className={'template-sermon__speakers'}>
-                    {sermon.presenters.map(speaker => {
-                        return <li>{speaker.name}</li>
-                    })}
-                </ul>
+                <div className="template-sermon__meta">
+                    {imageSrc ? <img src={imageSrc} alt={imageAlt}/> : null}
+                    <div className="template-sermon__meta-text">
+                        <h1>{sermon.title}</h1>
+                        <ul className={'template-sermon__speakers'}>
+                            {sermon.presenters.map(speaker => {
+                                return <li>{speaker.name}</li>
+                            })}
+                        </ul>
+                    </div>
+                </div>
 
                 {sermon.recordingDate ? <p>{(new Date(sermon.recordingDate)).toLocaleDateString()}</p> : null}
 
