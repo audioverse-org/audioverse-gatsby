@@ -1,0 +1,78 @@
+const path = require(`path`)
+
+const getSermons = async (graphql, language = "ENGLISH") => {
+    const run = async (after = '', nodes = []) => {
+
+        const result = await graphql(`
+query {
+  avorg {
+    sermons(language: ${language}, first: 50, after: "${after}") {
+      nodes {
+        title
+        id
+        presenters {
+          name
+          photoWithFallback {
+            url(size: 50)
+          }
+        }
+        mediaFiles {
+          url
+        }
+        recordingDate
+        description
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
+    `)
+
+        const sermons = result.data.avorg.sermons
+
+        nodes = nodes.concat(sermons.nodes)
+
+        if (sermons.pageInfo.hasNextPage) {
+            return await run(sermons.pageInfo.endCursor, nodes)
+        } else {
+            return nodes
+        }
+    }
+
+    return await run()
+}
+
+const createSermon = async (createPage, node, pathPrefix) => {
+    await createPage({
+        path: `${pathPrefix}${node.id}`,
+        component: path.resolve(`./src/templates/sermon.js`),
+        context: {node}
+    })
+}
+
+const createLanguageSermons = async (graphql, createPage, pathPrefix, language) => {
+    const sermons = await getSermons(graphql, language)
+
+    for (const node of sermons) {
+        await createSermon(createPage, node, pathPrefix)
+    }
+}
+
+exports.createSermons = async (graphql, createPage) => {
+    const languages = {
+        'ENGLISH': 'en/sermons/',
+        'SPANISH': 'es/sermons/',
+        'FRENCH': 'fr/sermons/',
+        'GERMAN': 'de/sermons/',
+        'CHINESE': 'zh/sermons/',
+        'JAPANESE': 'ja/sermons/',
+        'RUSSIAN': 'ru/sermons/',
+    }
+
+    await Promise.all(Object.keys(languages).map(async (language) => {
+        await createLanguageSermons(graphql, createPage, languages[language], language)
+    }))
+};
