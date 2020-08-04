@@ -8,11 +8,11 @@ describe("sermons", () => {
         expect(factory.createPages).toBeDefined()
     })
 
-    it("queries sermons", () => {
+    it("queries sermons type", () => {
         const graphql = jest.fn()
 
         factory.createPages(graphql)
 
-        expect(graphql).toBeCalled()
+        expect(graphql.mock.calls[0][0]).toContain('sermons')
     })
 })
