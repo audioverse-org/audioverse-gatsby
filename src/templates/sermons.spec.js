@@ -3,7 +3,7 @@ import {describe, expect, it, jest} from "@jest/globals";
 
 const factory = require('./sermons.factory.js')
 
-describe("sermons", () => {
+describe("sermons factory", () => {
     it("has factory method", () => {
         expect(factory.createPages).toBeDefined()
     })
