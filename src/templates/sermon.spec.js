@@ -44,6 +44,6 @@ describe("sermon factory", () => {
             }
         })
 
-        expect(createPage.mock.calls[0][0].path).toContain('en')
+        expect(createPage.mock.calls[0][0].path).toContain('en/sermons/')
     })
 })

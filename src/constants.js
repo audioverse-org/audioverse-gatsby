@@ -1,4 +1,4 @@
-export const languages = {
+exports.languages = {
     'ENGLISH': { base_url: 'en' },
     'SPANISH': { base_url: 'es' },
     'FRENCH': { base_url: 'fr' },

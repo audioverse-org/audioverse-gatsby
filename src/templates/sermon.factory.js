@@ -1,4 +1,5 @@
-const path = require(`path`)
+const path = require(`path`),
+    constants = require(`../constants.js`)
 
 const getSermons = async (graphql, language = "ENGLISH") => {
     const run = async (after = '', nodes = []) => {
@@ -47,7 +48,7 @@ query {
 
 const createSermon = async (createPage, node, pathPrefix) => {
     await createPage({
-        path: `${pathPrefix}${node.id}`,
+        path: `${pathPrefix}/sermons/${node.id}`,
         component: path.resolve(`./src/templates/sermon.js`),
         context: {node}
     })
@@ -62,17 +63,7 @@ const createLanguageSermons = async (graphql, createPage, pathPrefix, language) 
 }
 
 exports.createSermons = async (graphql, createPage) => {
-    const languages = {
-        'ENGLISH': 'en/sermons/',
-        'SPANISH': 'es/sermons/',
-        'FRENCH': 'fr/sermons/',
-        'GERMAN': 'de/sermons/',
-        'CHINESE': 'zh/sermons/',
-        'JAPANESE': 'ja/sermons/',
-        'RUSSIAN': 'ru/sermons/',
-    }
-
-    await Promise.all(Object.keys(languages).map(async (language) => {
-        await createLanguageSermons(graphql, createPage, languages[language], language)
+    await Promise.all(Object.keys(constants.languages).map(async (language) => {
+        await createLanguageSermons(graphql, createPage, constants.languages[language].base_url, language)
     }))
 };
