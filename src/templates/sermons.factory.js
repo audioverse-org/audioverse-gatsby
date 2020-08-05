@@ -2,8 +2,12 @@ const path = require(`path`),
     constants = require(`../constants.js`)
 
 exports.createPages = (graphql, createPage) => {
-    graphql(`{
-  sermons(language:ENGLISH) {
+    Object.keys(constants.languages).map((key) => {
+        const lang = constants.languages[key]
+
+        graphql(`
+{
+  sermons(language:${key}) {
     nodes {
       title
     }
@@ -17,10 +21,8 @@ exports.createPages = (graphql, createPage) => {
       count
     }
   }
-}`)
-
-    Object.keys(constants.languages).map((key) => {
-        const lang = constants.languages[key]
+}
+`)
 
         createPage({
             path: `${lang.base_url}/sermons`

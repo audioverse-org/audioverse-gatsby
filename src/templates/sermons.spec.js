@@ -34,4 +34,10 @@ describe("sermons factory", () => {
 
         expect(createPage.mock.calls[1][0].path).toContain('es/sermons')
     })
+
+    it("gets Spanish sermons", async () => {
+        const {graphql} = await testCreatePages({})
+
+        expect(graphql.mock.calls[1][0]).toContain('SPANISH')
+    })
 })
