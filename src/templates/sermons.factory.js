@@ -25,11 +25,7 @@ exports.createPages = async (graphql, createPage) => {
     }
 }
 `)
-        const nodes = result &&
-            result.data &&
-            result.data.avorg &&
-            result.data.avorg.sermons &&
-            result.data.avorg.sermons.nodes
+        const nodes = result?.data?.avorg?.sermons?.nodes
 
         await createPage({
             path: `${lang.base_url}/sermons`,
