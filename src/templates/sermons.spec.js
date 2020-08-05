@@ -20,24 +20,43 @@ describe("sermons factory", () => {
     it("queries sermons type", async () => {
         const {graphql} = await testCreatePages({})
 
-        expect(graphql.mock.calls[0][0]).toContain('sermons')
+        expect(graphql.mock.calls[0][0])
+            .toContain('sermons')
     })
 
     it("creates English page", async () => {
         const {createPage} = await testCreatePages({})
 
-        expect(createPage.mock.calls[0][0].path).toContain('en/sermons')
+        expect(createPage.mock.calls[0][0].path)
+            .toContain('en/sermons')
     })
 
     it("creates Spanish page", async () => {
         const {createPage} = await testCreatePages({})
 
-        expect(createPage.mock.calls[1][0].path).toContain('es/sermons')
+        expect(createPage.mock.calls[1][0].path)
+            .toContain('es/sermons')
     })
 
     it("gets Spanish sermons", async () => {
         const {graphql} = await testCreatePages({})
 
-        expect(graphql.mock.calls[1][0]).toContain('SPANISH')
+        expect(graphql.mock.calls[1][0])
+            .toContain('SPANISH')
+    })
+
+    it("passes sermons to createPage", async () => {
+        const sermons = ["sermons"]
+
+        const {createPage} = await testCreatePages({
+            data: {
+                sermons: {
+                    nodes: sermons
+                }
+            }
+        })
+
+        expect(createPage.mock.calls[0][0].context.nodes)
+            .toEqual(sermons)
     })
 })

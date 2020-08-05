@@ -1,11 +1,11 @@
 const path = require(`path`),
     constants = require(`../constants.js`)
 
-exports.createPages = (graphql, createPage) => {
-    Object.keys(constants.languages).map((key) => {
+exports.createPages = async (graphql, createPage) => {
+    await Promise.all(Object.keys(constants.languages).map(async (key) => {
         const lang = constants.languages[key]
 
-        graphql(`
+        const result = await graphql(`
 {
   sermons(language:${key}) {
     nodes {
@@ -23,9 +23,14 @@ exports.createPages = (graphql, createPage) => {
   }
 }
 `)
+        const nodes = result &&
+            result.data &&
+            result.data.sermons &&
+            result.data.sermons.nodes
 
         createPage({
-            path: `${lang.base_url}/sermons`
+            path: `${lang.base_url}/sermons`,
+            context: {nodes}
         })
-    })
+    }))
 }
