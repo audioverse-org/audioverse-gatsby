@@ -7,7 +7,7 @@ const testCreatePages = async (returnValue) => {
     const graphql = jest.fn(() => Promise.resolve(returnValue)),
         createPage = jest.fn();
 
-    await factory.createSermons(graphql, createPage)
+    await factory.createPages(graphql, createPage)
 
     return {graphql, createPage}
 }

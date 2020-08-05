@@ -62,7 +62,7 @@ const createLanguageSermons = async (graphql, createPage, pathPrefix, language) 
     }
 }
 
-exports.createSermons = async (graphql, createPage) => {
+exports.createPages = async (graphql, createPage) => {
     await Promise.all(Object.keys(constants.languages).map(async (language) => {
         await createLanguageSermons(graphql, createPage, constants.languages[language].base_url, language)
     }))

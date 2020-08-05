@@ -7,26 +7,29 @@ exports.createPages = async (graphql, createPage) => {
 
         const result = await graphql(`
 {
-  sermons(language:${key}) {
-    nodes {
-      title
+    avorg {
+        sermons(language:${key}) {
+            nodes {
+                title
+            }
+            pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+            }
+            aggregate {
+                count
+            }
+        }
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
-    aggregate {
-      count
-    }
-  }
 }
 `)
         const nodes = result &&
             result.data &&
-            result.data.sermons &&
-            result.data.sermons.nodes
+            result.data.avorg &&
+            result.data.avorg.sermons &&
+            result.data.avorg.sermons.nodes
 
         await createPage({
             path: `${lang.base_url}/sermons`,

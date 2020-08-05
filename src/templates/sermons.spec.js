@@ -53,8 +53,10 @@ describe("sermons factory", () => {
 
         const {createPage} = await testCreatePages({
             data: {
-                sermons: {
-                    nodes: sermons
+                avorg: {
+                    sermons: {
+                        nodes: sermons
+                    }
                 }
             }
         })
