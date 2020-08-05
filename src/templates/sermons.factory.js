@@ -28,7 +28,7 @@ exports.createPages = async (graphql, createPage) => {
             result.data.sermons &&
             result.data.sermons.nodes
 
-        createPage({
+        await createPage({
             path: `${lang.base_url}/sermons`,
             context: {nodes}
         })

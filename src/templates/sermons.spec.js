@@ -59,4 +59,18 @@ describe("sermons factory", () => {
         expect(createPage.mock.calls[0][0].context.nodes)
             .toEqual(sermons)
     })
+
+    it("awaits page create", async () => {
+        let done = false;
+
+        const graphql = jest.fn(() => Promise.resolve()),
+            createPage = jest.fn(async () => {
+                await new Promise(r => setTimeout(r, 2));
+                done = true;
+            });
+
+        await factory.createPages(graphql, createPage)
+
+        expect(done).toBeTruthy()
+    })
 })
