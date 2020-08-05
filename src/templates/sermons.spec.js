@@ -1,5 +1,8 @@
 import React from "react";
 import {describe, expect, it, jest} from "@jest/globals";
+import path from "path"
+
+jest.mock(`path`)
 
 const factory = require('./sermons.factory.js')
 
@@ -72,5 +75,11 @@ describe("sermons factory", () => {
         await factory.createPages(graphql, createPage)
 
         expect(done).toBeTruthy()
+    })
+
+    it("gets component", async () => {
+        await testCreatePages()
+
+        expect(path.resolve).toBeCalledWith(`./src/templates/sermons.js`)
     })
 })

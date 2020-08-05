@@ -30,6 +30,7 @@ exports.createPages = async (graphql, createPage) => {
 
         await createPage({
             path: `${lang.base_url}/sermons`,
+            component: path.resolve(`./src/templates/sermons.js`),
             context: {nodes}
         })
     }))
