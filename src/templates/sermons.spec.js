@@ -19,10 +19,10 @@ const testCreatePages = async ({returnValue, returnValues} = {}) => {
     return {graphql, createPage}
 }
 
-const expectOneCallToMatch = (mock, callable) => {
+const expectAnyCallToMatch = (mock, callable) => {
     const matches = mock.mock.calls.filter(callable)
 
-    expect(matches).toHaveLength(1)
+    expect(matches.length).toBeGreaterThan(0)
 }
 
 describe("sermons factory", () => {
@@ -102,7 +102,7 @@ describe("sermons factory", () => {
             ]
         })
 
-        expectOneCallToMatch(createPage, call => {
+        expectAnyCallToMatch(createPage, call => {
             return call[0].path.includes('en/sermons/page/2')
         })
     })
@@ -116,8 +116,40 @@ describe("sermons factory", () => {
             ]
         })
 
-        expectOneCallToMatch(graphql, call => {
+        expectAnyCallToMatch(graphql, call => {
             return call[0].includes('after:"the_cursor"')
+        })
+    })
+
+    it("provides number of pages", async () => {
+        const {createPage} = await testCreatePages({
+            returnValues: [
+                {data:{avorg:{sermons:{aggregate:{count:50}}}}}
+            ]
+        })
+
+        expectAnyCallToMatch(createPage, call => {
+            return call[0].context.pagination.total === 5
+        })
+    })
+
+    it("rounds number of pages up", async () => {
+        const {createPage} = await testCreatePages({
+            returnValues: [
+                {data:{avorg:{sermons:{aggregate:{count:55}}}}}
+            ]
+        })
+
+        expectAnyCallToMatch(createPage, call => {
+            return call[0].context.pagination.total === 6
+        })
+    })
+
+    it("includes current page number", async () => {
+        const {createPage} = await testCreatePages()
+
+        expectAnyCallToMatch(createPage, call => {
+            return call[0].context.pagination.current === 1
         })
     })
 })

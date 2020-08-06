@@ -33,12 +33,19 @@ const createPagesByLang = async (
 `)
 
     const sermons = _.get(result, 'data.avorg.sermons'),
-        nodes = _.get(sermons, 'nodes')
+        nodes = _.get(sermons, 'nodes'),
+        sermonCount = _.get(sermons, 'aggregate.count', 0)
 
     await createPage({
         path: `${lang.base_url}/sermons/page/${page}`,
         component: path.resolve(`./src/templates/sermons.js`),
-        context: {nodes}
+        context: {
+            nodes,
+            pagination: {
+                total: Math.ceil(sermonCount / 10),
+                current: page
+            }
+        }
     })
 
     const hasNextPage = _.get(sermons, 'pageInfo.hasNextPage')
