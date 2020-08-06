@@ -117,7 +117,7 @@ describe("sermons factory", () => {
         })
 
         expectOneCallToMatch(graphql, call => {
-            return call[0].includes('after:the_cursor')
+            return call[0].includes('after:"the_cursor"')
         })
     })
 })

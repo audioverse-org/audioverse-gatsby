@@ -1,4 +1,5 @@
-const path = require(`path`),
+const _ = require(`lodash`),
+    path = require(`path`),
     constants = require(`../constants.js`)
 
 const createPagesByLang = async (
@@ -30,12 +31,9 @@ const createPagesByLang = async (
     }
 }
 `)
-    const sermons = result &&
-        result.data &&
-        result.data.avorg &&
-        result.data.avorg.sermons
 
-    const nodes = sermons && sermons.nodes
+    const sermons = _.get(result, 'data.avorg.sermons'),
+        nodes = _.get(sermons, 'nodes')
 
     await createPage({
         path: `${lang.base_url}/sermons/page/${page}`,
@@ -43,14 +41,10 @@ const createPagesByLang = async (
         context: {nodes}
     })
 
-    const hasNextPage = sermons &&
-        sermons.pageInfo &&
-        sermons.pageInfo.hasNextPage
+    const hasNextPage = _.get(sermons, 'pageInfo.hasNextPage')
 
     if (hasNextPage) {
-        const endCursor = sermons &&
-            sermons.pageInfo &&
-            sermons.pageInfo.endCursor
+        const endCursor = _.get(sermons, 'pageInfo.endCursor')
 
         await createPagesByLang(
             langKey,
