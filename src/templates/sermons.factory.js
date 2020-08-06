@@ -1,14 +1,19 @@
 const path = require(`path`),
     constants = require(`../constants.js`)
 
-exports.createPages = async (graphql, createPage) => {
-    await Promise.all(Object.keys(constants.languages).map(async (key) => {
-        const lang = constants.languages[key]
+const createPagesByLang = async (
+    langKey,
+    graphql,
+    createPage,
+    page = 1,
+    cursor = null
+) => {
+    const lang = constants.languages[langKey]
 
-        const result = await graphql(`
+    const result = await graphql(`
 {
     avorg {
-        sermons(language:${key}) {
+        sermons(language:${langKey}, after:"${cursor}") {
             nodes {
                 title
             }
@@ -25,16 +30,42 @@ exports.createPages = async (graphql, createPage) => {
     }
 }
 `)
-        const nodes = result &&
-            result.data &&
-            result.data.avorg &&
-            result.data.avorg.sermons &&
-            result.data.avorg.sermons.nodes
+    const sermons = result &&
+        result.data &&
+        result.data.avorg &&
+        result.data.avorg.sermons
 
-        await createPage({
-            path: `${lang.base_url}/sermons`,
-            component: path.resolve(`./src/templates/sermons.js`),
-            context: {nodes}
-        })
+    const nodes = sermons && sermons.nodes
+
+    await createPage({
+        path: `${lang.base_url}/sermons/page/${page}`,
+        component: path.resolve(`./src/templates/sermons.js`),
+        context: {nodes}
+    })
+
+    const hasNextPage = sermons &&
+        sermons.pageInfo &&
+        sermons.pageInfo.hasNextPage
+
+    if (hasNextPage) {
+        const endCursor = sermons &&
+            sermons.pageInfo &&
+            sermons.pageInfo.endCursor
+
+        await createPagesByLang(
+            langKey,
+            graphql,
+            createPage,
+            page + 1,
+            endCursor
+        )
+    }
+}
+
+exports.createPages = async (graphql, createPage) => {
+    const langKeys = Object.keys(constants.languages)
+
+    await Promise.all(langKeys.map(async (key) => {
+        return await createPagesByLang(key, graphql, createPage)
     }))
 }
