@@ -66,7 +66,5 @@ const createPagesByLang = async (
 exports.createPages = async (graphql, createPage) => {
     const langKeys = Object.keys(constants.languages)
 
-    await Promise.all(langKeys.map(async (key) => {
-        return await createPagesByLang(key, graphql, createPage)
-    }))
+    await Promise.all(langKeys.map((key) => createPagesByLang(key, graphql, createPage)))
 }
