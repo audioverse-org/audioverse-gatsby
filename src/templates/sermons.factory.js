@@ -1,20 +1,13 @@
 const _ = require(`lodash`),
     path = require(`path`),
-    constants = require(`../constants.js`)
+    constants = require(`../constants.js`),
+    queries = require(`../helpers/queries`)
 
-const createPagesByLang = async (
-    langKey,
-    graphql,
-    createPage,
-    page = 1,
-    cursor = null
-) => {
-    const lang = constants.languages[langKey]
-
-    const result = await graphql(`
+const queryBuilder = ({language, cursor}) => {
+    return `
 {
     avorg {
-        sermons(language:${langKey}, after:"${cursor}") {
+        sermons(language:${language}, after:"${cursor}") {
             nodes {
                 title
             }
@@ -30,37 +23,35 @@ const createPagesByLang = async (
         }
     }
 }
-`)
+`
+}
 
-    const sermons = _.get(result, 'data.avorg.sermons'),
-        nodes = _.get(sermons, 'nodes'),
-        sermonCount = _.get(sermons, 'aggregate.count', 0)
+const createPagesByLang = async (
+    langKey,
+    graphql,
+    createPage
+) => {
+    const queryArgs = {language: langKey},
+        pages = await queries.getPages(graphql, queryBuilder, queryArgs, 'data.avorg.sermons')
 
-    await createPage({
-        path: `${lang.base_url}/sermons/page/${page}`,
-        component: path.resolve(`./src/templates/sermons.js`),
-        context: {
-            nodes,
-            pagination: {
-                total: Math.ceil(sermonCount / 10),
-                current: page
+    await Promise.all(pages.map((page, i) => {
+        const baseUrl = constants.languages[langKey].base_url,
+            nodes = _.get(page, 'nodes'),
+            sermonCount = _.get(page, 'aggregate.count', 0),
+            pageNumber = i + 1
+
+        return createPage({
+            path: `${baseUrl}/sermons/page/${pageNumber}`,
+            component: path.resolve(`./src/templates/sermons.js`),
+            context: {
+                nodes,
+                pagination: {
+                    total: Math.ceil(sermonCount / 10),
+                    current: pageNumber
+                }
             }
-        }
-    })
-
-    const hasNextPage = _.get(sermons, 'pageInfo.hasNextPage')
-
-    if (hasNextPage) {
-        const endCursor = _.get(sermons, 'pageInfo.endCursor')
-
-        await createPagesByLang(
-            langKey,
-            graphql,
-            createPage,
-            page + 1,
-            endCursor
-        )
-    }
+        })
+    }))
 }
 
 exports.createPages = async (graphql, createPage) => {
