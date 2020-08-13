@@ -5,12 +5,10 @@
  */
 
 const sermonFactory = require('./src/templates/sermon.factory.js'),
-    sermonsFactory = require('./src/templates/sermons.factory.js'),
-    filesystem = require('./src/helpers/filesystem')
+    sermonsFactory = require('./src/templates/sermons.factory.js')
 
 exports.createPages = async ({graphql, actions}) => {
-    const {createPage} = actions,
-        config = filesystem.getFile('dev.yaml')
+    const {createPage} = actions
 
     await sermonFactory.createPages(graphql, createPage)
     await sermonsFactory.createPages(graphql, createPage)
