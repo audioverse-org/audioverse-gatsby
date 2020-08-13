@@ -3,8 +3,7 @@ const _ = require(`lodash`),
     constants = require(`../constants.js`),
     queries = require(`../helpers/queries`)
 
-const queryBuilder = ({language, cursor}) => {
-    return `
+const queryBuilder = ({language, cursor}) => `
 {
     avorg {
         sermons(language:${language}, after:"${cursor}") {
@@ -22,17 +21,19 @@ const queryBuilder = ({language, cursor}) => {
             }
         }
     }
-}
-`
-}
+}`
 
 const createPagesByLang = async (
     langKey,
     graphql,
     createPage
 ) => {
-    const queryArgs = {language: langKey},
-        pages = await queries.getPages(graphql, queryBuilder, queryArgs, 'data.avorg.sermons')
+    const pages = await queries.getPages(
+        graphql,
+        queryBuilder,
+        {language: langKey},
+        'data.avorg.sermons'
+    )
 
     await Promise.all(pages.map((page, i) => {
         const baseUrl = constants.languages[langKey].base_url,
