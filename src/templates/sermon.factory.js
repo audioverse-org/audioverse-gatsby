@@ -1,4 +1,5 @@
-const path = require(`path`),
+const _ = require(`lodash`),
+    path = require(`path`),
     constants = require(`../constants.js`)
 
 const getSermons = async (graphql, language = "ENGLISH") => {
@@ -32,12 +33,15 @@ query {
 }
     `)
 
-        const sermons = result.data.avorg.sermons
+        const sermons = _.get(result, 'data.avorg.sermons'),
+            hasNextPage = _.get(sermons, 'pageInfo.hasNextPage')
 
-        nodes = nodes.concat(sermons.nodes)
+        nodes = nodes.concat(_.get(sermons, 'nodes'))
 
-        if (sermons.pageInfo.hasNextPage) {
-            return await run(sermons.pageInfo.endCursor, nodes)
+        if (hasNextPage) {
+            const endCursor = _.get(sermons, 'pageInfo.endCursor')
+
+            return await run(endCursor, nodes)
         } else {
             return nodes
         }
@@ -47,8 +51,10 @@ query {
 }
 
 const createSermon = async (createPage, node, pathPrefix) => {
+    const nodeId = _.get(node, 'node.id')
+
     await createPage({
-        path: `${pathPrefix}/sermons/${node.id}`,
+        path: `${pathPrefix}/sermons/${nodeId}`,
         component: path.resolve(`./src/templates/sermon.js`),
         context: {node}
     })

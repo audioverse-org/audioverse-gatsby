@@ -1,6 +1,6 @@
 import React from "react"
 import Layout from "../components/layout"
-import './sermon.css'
+import './sermon.scss'
 
 export default function Sermon({ pageContext }) {
     const sermon = pageContext.node,

@@ -1,6 +1,6 @@
 import React from "react"
 import Layout from "../components/layout"
-import './sermons.css'
+import './sermons.scss'
 import Pagination from "../components/molecules/pagination"
 
 export default function Sermons({ pageContext }) {

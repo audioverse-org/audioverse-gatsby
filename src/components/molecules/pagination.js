@@ -1,5 +1,5 @@
 import React from "react"
-import "./pagination.css"
+import "./pagination.scss"
 
 export function pagination(current, total) {
     const center = [current - 2, current - 1, current, current + 1, current + 2],

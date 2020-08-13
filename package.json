@@ -11,11 +11,13 @@
     "gatsby-plugin-manifest": "^2.4.18",
     "gatsby-plugin-offline": "^3.2.13",
     "gatsby-plugin-react-helmet": "^3.3.6",
+    "gatsby-plugin-sass": "^2.3.12",
     "gatsby-plugin-sharp": "^2.6.14",
     "gatsby-source-filesystem": "^2.3.14",
     "gatsby-source-graphql": "^2.6.1",
     "gatsby-transformer-sharp": "^2.5.7",
     "lodash": "^4.17.19",
+    "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -43,7 +45,9 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "docker:start": "gatsby develop --host 0.0.0.0",
+    "docker:debug": "node --no-lazy node_modules/.bin/gatsby develop --inspect-brk=0.0.0.0"
   },
   "repository": {
     "type": "git",
