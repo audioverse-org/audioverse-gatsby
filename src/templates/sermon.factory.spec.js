@@ -46,4 +46,21 @@ describe("sermon factory", () => {
 
         expect(createPage.mock.calls[0][0].path).toContain('en/sermons/')
     })
+
+    it("passes sermon data", async () => {
+        const {createPage} = await testCreatePages({
+            data: {
+                avorg: {
+                    sermons: {
+                        nodes: [{
+                            'title': 'the_title'
+                        }],
+                        pageInfo: {hasNextPage: false}
+                    }
+                }
+            }
+        })
+
+        expect(createPage.mock.calls[0][0].context.node).toEqual({'title': 'the_title'})
+    })
 })
