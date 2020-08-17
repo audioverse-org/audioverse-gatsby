@@ -1,6 +1,7 @@
 import React from "react";
-import {describe, expect, it, jest} from "@jest/globals";
 import path from "path"
+import _ from "lodash"
+import constants from "../constants"
 
 jest.mock(`path`)
 
@@ -17,6 +18,16 @@ const testCreatePages = async ({returnValue, returnValues} = {}) => {
     await factory.createPages(graphql, createPage)
 
     return {graphql, createPage}
+}
+
+const runWithMockedConstants = async (modifications, closure) => {
+    const backup = {...constants}
+
+    _.assign(constants, modifications)
+
+    await closure()
+
+    _.assign(constants, backup)
 }
 
 const expectAnyCallToMatch = (mock, callable) => {
@@ -150,6 +161,24 @@ describe("sermons factory", () => {
 
         expectAnyCallToMatch(createPage, call => {
             return call[0].context.pagination.current === 1
+        })
+    })
+
+    it("respects dev query limits", async () => {
+        await runWithMockedConstants({
+            languages: {'ENGLISH': { base_url: 'en' },},
+            query_page_limit: 10
+        }, async () => {
+            const returnValue = {}
+
+            _.set(returnValue, 'data.avorg.sermons.pageInfo.hasNextPage', true)
+            _.set(returnValue, 'data.avorg.sermons.pageInfo.endCursor', 'the_cursor')
+
+            const returnValues = new Array(11).fill(returnValue);
+
+            const {graphql} = await testCreatePages({returnValues})
+
+            expect(graphql).toBeCalledTimes(10)
         })
     })
 })
