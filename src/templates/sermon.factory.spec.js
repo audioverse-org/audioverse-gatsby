@@ -44,4 +44,10 @@ describe("sermon factory", () => {
 
         expect(createPage.mock.calls[0][0].context.node).toEqual({'title': 'the_title'})
     })
+
+    it("uses sermon id in url", async () => {
+        const {createPage} = await testCreatePages([{id: 3}])
+
+        expect(createPage.mock.calls[0][0].path).toContain('en/sermons/3')
+    })
 })

@@ -42,7 +42,7 @@ const getSermons = async (graphql, language = "ENGLISH") => {
 }
 
 const createSermon = async (createPage, node, pathPrefix) => {
-    const nodeId = _.get(node, 'node.id')
+    const nodeId = _.get(node, 'id')
 
     await createPage({
         path: `${pathPrefix}/sermons/${nodeId}`,
