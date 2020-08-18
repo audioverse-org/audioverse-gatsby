@@ -57,6 +57,6 @@ describe("sermon factory", () => {
     it("defines query variables", async () => {
         const {graphql} = await testCreatePages()
 
-        expect(graphql.mock.calls[0][0]).toContain("loadPagesQuery($language: String!, $cursor: String)")
+        expect(graphql.mock.calls[0][0]).toContain("loadPagesQuery($language: AVORG_Language!, $cursor: String)")
     })
 })
