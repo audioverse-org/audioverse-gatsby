@@ -65,8 +65,11 @@ describe("sermons factory", () => {
     it("gets Spanish sermons", async () => {
         const {graphql} = await testCreatePages()
 
-        expect(graphql.mock.calls[1][0])
-            .toContain('SPANISH')
+        expect(graphql.mock.calls[1][1])
+            .toStrictEqual({
+                language: 'SPANISH',
+                cursor: null
+            })
     })
 
     it("passes sermons to createPage", async () => {
@@ -128,7 +131,7 @@ describe("sermons factory", () => {
         })
 
         expectAnyCallToMatch(graphql, call => {
-            return call[0].includes('after:"the_cursor"')
+            return call[1].cursor === "the_cursor"
         })
     })
 

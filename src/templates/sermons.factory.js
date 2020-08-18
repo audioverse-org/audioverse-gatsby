@@ -3,10 +3,10 @@ const _ = require(`lodash`),
     constants = require(`../constants.js`),
     queries = require(`../helpers/queries`)
 
-const queryBuilder = ({language, cursor}) => `
-{
+const query = `
+query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
     avorg {
-        sermons(language:${language}, after:"${cursor}") {
+        sermons(language: $language, after: $cursor) {
             nodes {
                 title
             }
@@ -30,7 +30,7 @@ const createPagesByLang = async (
 ) => {
     const pages = await queries.getPages(
         graphql,
-        queryBuilder,
+        query,
         {language: langKey},
         'data.avorg.sermons'
     )

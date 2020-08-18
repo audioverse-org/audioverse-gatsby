@@ -3,20 +3,20 @@ const _ = require(`lodash`),
     constants = require(`../constants.js`),
     queries = require(`../helpers/queries`)
 
-const queryBuilder = ({language, cursor}) => `
-query {
+const query = `
+query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
   avorg {
-    sermons(language: ${language}, first: 50, after: "${cursor}") {
+    sermons(language: $language, first: 50, after: $cursor) {
       nodes {
         title
         id
-        presenters {
+        persons {
           name
-          photoWithFallback {
+          imageWithFallback {
             url(size: 50)
           }
         }
-        mediaFiles {
+        audioFiles {
           url
         }
         recordingDate
@@ -33,7 +33,7 @@ query {
 const getSermons = async (graphql, language = "ENGLISH") => {
     const pages = await queries.getPages(
         graphql,
-        queryBuilder,
+        query,
         {language},
         'data.avorg.sermons'
     )

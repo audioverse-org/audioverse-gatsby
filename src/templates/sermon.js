@@ -4,8 +4,8 @@ import './sermon.scss'
 
 export default function Sermon({ pageContext }) {
     const sermon = pageContext.node,
-        firstPresenter = sermon.presenters[0],
-        imageSrc = firstPresenter && firstPresenter.photoWithFallback.url,
+        firstPresenter = sermon.persons[0],
+        imageSrc = firstPresenter && firstPresenter.imageWithFallback.url,
         imageAlt = firstPresenter && firstPresenter.name;
 
     return (
@@ -16,7 +16,7 @@ export default function Sermon({ pageContext }) {
                     <div className="template-sermon__meta-text">
                         <h1>{sermon.title}</h1>
                         <ul className={'template-sermon__speakers'}>
-                            {sermon.presenters.map(speaker => {
+                            {sermon.persons.map(speaker => {
                                 return <li>{speaker.name}</li>
                             })}
                         </ul>
@@ -25,7 +25,7 @@ export default function Sermon({ pageContext }) {
 
                 {sermon.recordingDate ? <p>{(new Date(sermon.recordingDate)).toLocaleDateString()}</p> : null}
 
-                {sermon.mediaFiles.map(file => {
+                {sermon.audioFiles.map(file => {
                     return <div><audio controls src={file.url} preload={'metadata'}>Your browser doesn't support this player.</audio></div>
                 })}
 
