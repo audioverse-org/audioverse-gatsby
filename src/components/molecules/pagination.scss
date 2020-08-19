@@ -9,7 +9,7 @@
     margin-right: .2em;
 
     a {
-      color: $gray-light;
+      color: $gray-dark;
       text-decoration: none;
       display: block;
       border-radius: 3px;
@@ -17,7 +17,7 @@
     }
 
     &:not(.active) a:hover {
-      background-color: $gray-bleached;
+      background-color: $gray-lighter;
     }
   }
 

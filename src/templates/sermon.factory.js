@@ -6,7 +6,7 @@ const _ = require(`lodash`),
 const query = `
 query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
   avorg {
-    sermons(language: $language, first: 50, after: $cursor) {
+    sermons(language: $language, first: 50, after: $cursor, orderBy: {direction: DESC, field: CREATED_AT}) {
       nodes {
         title
         id

@@ -1,2 +1,16 @@
+@import "../common";
+
 .template-sermons {
+  img {
+    border-radius: 100%;
+  }
+  tr {
+    border-top: 2px solid $gray-lightest;
+  }
+  tr:nth-child(even) {
+    background-color: $gray-lightest;
+  }
+  td {
+    padding: .5em;
+  }
 }

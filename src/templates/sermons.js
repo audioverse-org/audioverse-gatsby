@@ -20,7 +20,7 @@ export default function Sermons({pageContext, data}) {
             <table>
                 {sermons.map((n, i) => <tr>
                     <td><img src={n.imageWithFallback.url} alt={n.title} /></td>
-                    <td>{n.title}</td>
+                    <td><a href={`/en/sermons/${n.id}`}>{n.title}</a></td>
                     <td>{n.persons.map(p => p.name).join(', ')}</td>
                     <td>{moment(n.recordingDate).fromNow()}</td>
                     <td>{new Date(1000 * n.duration).toISOString().substr(11, 8)}</td>
@@ -38,6 +38,7 @@ export const query = graphql`
             sermons(language: $language, after: $cursor, orderBy: {direction: DESC, field: CREATED_AT}) {
                 nodes {
                     title
+                    id
                     imageWithFallback {
                         url(size: 50)
                     }
