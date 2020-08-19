@@ -1,3 +1,5 @@
+@import "../../common";
+
 .molecule-pagination {
   margin-left: 0;
   margin-top: 2em;
@@ -7,7 +9,7 @@
     margin-right: .2em;
 
     a {
-      color: #747474;
+      color: $gray-light;
       text-decoration: none;
       display: block;
       border-radius: 3px;
@@ -15,13 +17,13 @@
     }
 
     &:not(.active) a:hover {
-      background-color: #eee;
+      background-color: $gray-bleached;
     }
   }
 
   .active a {
     color: white;
     font-weight: bold;
-    background-color: #3DA88E;
+    background-color: $accent;
   }
 }
