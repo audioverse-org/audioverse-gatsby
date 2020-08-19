@@ -1,23 +1,22 @@
-const path = require(`path`),
-    constants = require(`../constants.js`)
+const _ = require(`lodash`),
+    path = require(`path`),
+    constants = require(`../constants.js`),
+    queries = require(`../helpers/queries`)
 
-const getSermons = async (graphql, language = "ENGLISH") => {
-    const run = async (after = '', nodes = []) => {
-
-        const result = await graphql(`
-query {
+const query = `
+query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
   avorg {
-    sermons(language: ${language}, first: 50, after: "${after}") {
+    sermons(language: $language, first: 50, after: $cursor) {
       nodes {
         title
         id
-        presenters {
+        persons {
           name
-          photoWithFallback {
+          imageWithFallback {
             url(size: 50)
           }
         }
-        mediaFiles {
+        audioFiles {
           url
         }
         recordingDate
@@ -29,26 +28,24 @@ query {
       }
     }
   }
-}
-    `)
+}`
 
-        const sermons = result.data.avorg.sermons
+const getSermons = async (graphql, language = "ENGLISH") => {
+    const pages = await queries.getPages(
+        graphql,
+        query,
+        {language},
+        'data.avorg.sermons'
+    )
 
-        nodes = nodes.concat(sermons.nodes)
-
-        if (sermons.pageInfo.hasNextPage) {
-            return await run(sermons.pageInfo.endCursor, nodes)
-        } else {
-            return nodes
-        }
-    }
-
-    return await run()
+    return pages.map(p => p.nodes).flat()
 }
 
 const createSermon = async (createPage, node, pathPrefix) => {
+    const nodeId = _.get(node, 'id')
+
     await createPage({
-        path: `${pathPrefix}/sermons/${node.id}`,
+        path: `${pathPrefix}/sermons/${nodeId}`,
         component: path.resolve(`./src/templates/sermon.js`),
         context: {node}
     })
@@ -57,13 +54,16 @@ const createSermon = async (createPage, node, pathPrefix) => {
 const createLanguageSermons = async (graphql, createPage, pathPrefix, language) => {
     const sermons = await getSermons(graphql, language)
 
-    for (const node of sermons) {
-        await createSermon(createPage, node, pathPrefix)
-    }
+    await Promise.all(sermons.map(node => createSermon(createPage, node, pathPrefix)))
 }
 
 exports.createPages = async (graphql, createPage) => {
-    await Promise.all(Object.keys(constants.languages).map(async (language) => {
-        await createLanguageSermons(graphql, createPage, constants.languages[language].base_url, language)
+    await Promise.all(Object.keys(constants.languages).map((language) => {
+        return createLanguageSermons(
+            graphql,
+            createPage,
+            constants.languages[language].base_url,
+            language
+        )
     }))
 };

@@ -1,0 +1,29 @@
+@import "../../common";
+
+.molecule-pagination {
+  margin-left: 0;
+  margin-top: 2em;
+  text-align: center;
+  li {
+    display: inline-block;
+    margin-right: .2em;
+
+    a {
+      color: $gray-light;
+      text-decoration: none;
+      display: block;
+      border-radius: 3px;
+      padding: .2em .5em;
+    }
+
+    &:not(.active) a:hover {
+      background-color: $gray-bleached;
+    }
+  }
+
+  .active a {
+    color: white;
+    font-weight: bold;
+    background-color: $accent;
+  }
+}

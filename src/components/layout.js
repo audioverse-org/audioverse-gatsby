@@ -10,9 +10,9 @@ import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
 
 import Header from "./header"
-import "./layout.css"
+import "./layout.scss"
 
-const Layout = ({ children }) => {
+const Layout = ({ children, className }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -33,7 +33,7 @@ const Layout = ({ children }) => {
           padding: `0 1.0875rem 1.45rem`,
         }}
       >
-        <main>{children}</main>
+        <main className={className}>{children}</main>
         <footer>
           AudioVerse © {new Date().getFullYear()} All Rights Reserved.
         </footer>

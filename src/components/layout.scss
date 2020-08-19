@@ -1,18 +1,14 @@
-$gray-night: #1c1c1d;
-$gray-dark: #242426;
-$gray-mid: #262627;
-$gray-light: #dbdbdb;
-$gray-bleached: #e5e5e5;
+@import "../common";
 
 * {
   box-sizing: border-box;
 }
 
-
 .organism-header {
   background-color: $gray-dark;
 }
 
+// CSS Reset, Etc:
 
 html {
   font-family: sans-serif;

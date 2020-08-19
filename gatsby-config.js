@@ -1,3 +1,7 @@
+const constants = require(`./src/constants`)
+
+console.log(`env: ${constants.environment}`)
+
 module.exports = {
     siteMetadata: {
         title: `AudioVerse`,
@@ -23,6 +27,7 @@ module.exports = {
         },
         `gatsby-transformer-sharp`,
         `gatsby-plugin-sharp`,
+        `gatsby-plugin-sass`,
         {
             resolve: `gatsby-plugin-manifest`,
             options: {

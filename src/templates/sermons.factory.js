@@ -1,14 +1,12 @@
-const path = require(`path`),
-    constants = require(`../constants.js`)
+const _ = require(`lodash`),
+    path = require(`path`),
+    constants = require(`../constants.js`),
+    queries = require(`../helpers/queries`)
 
-exports.createPages = async (graphql, createPage) => {
-    await Promise.all(Object.keys(constants.languages).map(async (key) => {
-        const lang = constants.languages[key]
-
-        const result = await graphql(`
-{
+const query = `
+query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
     avorg {
-        sermons(language:${key}) {
+        sermons(language: $language, after: $cursor) {
             nodes {
                 title
             }
@@ -23,18 +21,42 @@ exports.createPages = async (graphql, createPage) => {
             }
         }
     }
-}
-`)
-        const nodes = result &&
-            result.data &&
-            result.data.avorg &&
-            result.data.avorg.sermons &&
-            result.data.avorg.sermons.nodes
+}`
 
-        await createPage({
-            path: `${lang.base_url}/sermons`,
+const createPagesByLang = async (
+    langKey,
+    graphql,
+    createPage
+) => {
+    const pages = await queries.getPages(
+        graphql,
+        query,
+        {language: langKey},
+        'data.avorg.sermons'
+    )
+
+    await Promise.all(pages.map((page, i) => {
+        const baseUrl = constants.languages[langKey].base_url,
+            nodes = _.get(page, 'nodes'),
+            sermonCount = _.get(page, 'aggregate.count', 0),
+            pageNumber = i + 1
+
+        return createPage({
+            path: `${baseUrl}/sermons/page/${pageNumber}`,
             component: path.resolve(`./src/templates/sermons.js`),
-            context: {nodes}
+            context: {
+                nodes,
+                pagination: {
+                    total: Math.ceil(sermonCount / 10),
+                    current: pageNumber
+                }
+            }
         })
     }))
+}
+
+exports.createPages = async (graphql, createPage) => {
+    const langKeys = Object.keys(constants.languages)
+
+    await Promise.all(langKeys.map((key) => createPagesByLang(key, graphql, createPage)))
 }
