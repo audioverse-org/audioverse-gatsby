@@ -184,4 +184,20 @@ describe("sermons factory", () => {
             expect(graphql).toBeCalledTimes(10)
         })
     })
+
+    it("passes language to page", async () => {
+        const {createPage} = await testCreatePages()
+
+        expect(createPage.mock.calls[0][0].context.language)
+            .toEqual("ENGLISH")
+    })
+
+    it("passes cursor to page", async () => {
+        const {createPage} = await testCreatePages({
+            returnValue: {data:{avorg:{sermons:{pageInfo:{endCursor:"the_cursor"}}}}}
+        })
+
+        expect(createPage.mock.calls[0][0].context.cursor)
+            .toEqual("the_cursor")
+    })
 })

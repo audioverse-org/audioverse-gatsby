@@ -6,14 +6,9 @@ const _ = require(`lodash`),
 const query = `
 query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
     avorg {
-        sermons(language: $language, after: $cursor) {
-            nodes {
-                title
-            }
+        sermons(language: $language, after: $cursor, orderBy: {direction: DESC, field: CREATED_AT}) {
             pageInfo {
                 hasNextPage
-                hasPreviousPage
-                startCursor
                 endCursor
             }
             aggregate {
@@ -39,6 +34,7 @@ const createPagesByLang = async (
         const baseUrl = constants.languages[langKey].base_url,
             nodes = _.get(page, 'nodes'),
             sermonCount = _.get(page, 'aggregate.count', 0),
+            cursor = _.get(page, 'pageInfo.endCursor'),
             pageNumber = i + 1
 
         return createPage({
@@ -49,7 +45,9 @@ const createPagesByLang = async (
                 pagination: {
                     total: Math.ceil(sermonCount / 10),
                     current: pageNumber
-                }
+                },
+                language: langKey,
+                cursor
             }
         })
     }))

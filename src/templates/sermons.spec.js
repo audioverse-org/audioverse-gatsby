@@ -28,6 +28,12 @@ describe("sermons component", () => {
                 current: 1,
                 total: 42
             }
+        }} data={{
+            avorg: {
+                sermons: {
+                    nodes: []
+                }
+            }
         }} />)
 
         expect(getByText('42')).toBeDefined()
@@ -39,6 +45,12 @@ describe("sermons component", () => {
             pagination: {
                 current: 3,
                 total: 5
+            }
+        }} data={{
+            avorg: {
+                sermons: {
+                    nodes: []
+                }
             }
         }} />)
 
@@ -53,6 +65,12 @@ describe("sermons component", () => {
             pagination: {
                 current: 3,
                 total: 5
+            }
+        }} data={{
+            avorg: {
+                sermons: {
+                    nodes: []
+                }
             }
         }} />)
 
