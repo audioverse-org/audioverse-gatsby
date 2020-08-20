@@ -10,8 +10,6 @@ export default function Sermons({pageContext, data}) {
         return <p>Page query failed</p>
     }
 
-    console.log(data)
-
     const sermons = data.avorg.sermons.nodes,
         {total, current} = pageContext.pagination;
 
