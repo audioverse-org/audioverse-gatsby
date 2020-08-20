@@ -40,14 +40,6 @@ describe("sermon factory", () => {
         expect(createPage.mock.calls[0][0].path).toContain('en/sermons/')
     })
 
-    it("passes sermon data", async () => {
-        const {createPage} = await testCreatePages([{
-            'title': 'the_title'
-        }])
-
-        expect(createPage.mock.calls[0][0].context.node).toEqual({'title': 'the_title'})
-    })
-
     it("uses sermon id in url", async () => {
         const {createPage} = await testCreatePages([{id: 3}])
 
@@ -58,5 +50,13 @@ describe("sermon factory", () => {
         const {graphql} = await testCreatePages()
 
         expect(graphql.mock.calls[0][0]).toContain("loadPagesQuery($language: AVORG_Language!, $cursor: String)")
+    })
+
+    it("passes id to page", async () => {
+        const {createPage} = await testCreatePages([{
+            'id': 'the_id'
+        }])
+
+        expect(createPage.mock.calls[0][0].context.id).toEqual('the_id')
     })
 })

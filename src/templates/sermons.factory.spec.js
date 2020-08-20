@@ -72,16 +72,6 @@ describe("sermons factory", () => {
             })
     })
 
-    it("passes sermons to createPage", async () => {
-        const sermons = ["sermons"],
-            returnValue = {data:{avorg:{sermons:{nodes:sermons}}}}
-
-        const {createPage} = await testCreatePages({returnValue})
-
-        expect(createPage.mock.calls[0][0].context.nodes)
-            .toEqual(sermons)
-    })
-
     it("awaits page create", async () => {
         let done = false;
 

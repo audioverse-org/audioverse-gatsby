@@ -32,7 +32,6 @@ const createPagesByLang = async (
 
     await Promise.all(pages.map((page, i) => {
         const baseUrl = constants.languages[langKey].base_url,
-            nodes = _.get(page, 'nodes'),
             sermonCount = _.get(page, 'aggregate.count', 0),
             cursor = _.get(page, 'pageInfo.endCursor'),
             pageNumber = i + 1
@@ -41,7 +40,6 @@ const createPagesByLang = async (
             path: `${baseUrl}/sermons/page/${pageNumber}`,
             component: path.resolve(`./src/templates/sermons.js`),
             context: {
-                nodes,
                 pagination: {
                     total: Math.ceil(sermonCount / 10),
                     current: pageNumber
