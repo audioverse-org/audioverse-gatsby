@@ -58,6 +58,12 @@ jobs:
         run: npm ci
       - name: Build site
         run: npm run build
+      - name: Finished build stats
+        run: |
+          echo "Size of build folder:"
+          du -hd 0 ./src
+          echo "Number of files in build folder:"
+          find ./src -type f | wc -l
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1
         with:
@@ -68,6 +74,5 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          DEBUG: "*"
         timeout-minutes: 3
 
