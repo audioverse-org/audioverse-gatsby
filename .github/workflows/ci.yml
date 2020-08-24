@@ -61,9 +61,9 @@ jobs:
       - name: Finished build stats
         run: |
           echo "Size of build folder:"
-          du -hd 0 ./src
+          du -hd 0 ./public
           echo "Number of files in build folder:"
-          find ./src -type f | wc -l
+          find ./public -type f | wc -l
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1
         with:
