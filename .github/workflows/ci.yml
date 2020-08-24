@@ -58,16 +58,20 @@ jobs:
         run: npm ci
       - name: Build site
         run: npm run build
+      - name: Compress build
+        run: zip -r public.zip ./public
       - name: Finished build stats
         run: |
-          echo "Size of build folder:"
-          du -hd 0 ./public
           echo "Number of files in build folder:"
           find ./public -type f | wc -l
+          echo "Size of build folder:"
+          du -hd 0 ./public
+          echo "Size of compressed build:"
+          du -h ./public.zip
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1
         with:
-          publish-dir: './public'
+          publish-dir: './public.zip'
           production-branch: master
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
