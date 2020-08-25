@@ -4,20 +4,12 @@ const _ = require(`lodash`),
     queries = require(`../helpers/queries`)
 
 const query = `
-query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
+query loadPagesQuery($language: AVORG_Language!, $cursor: String, $first: Int!) {
     avorg {
-        sermons(language: $language, after: $cursor, orderBy: {direction: DESC, field: CREATED_AT}) {
+        sermons(language: $language, first: $first, after: $cursor, orderBy: {direction: DESC, field: CREATED_AT}) {
             nodes {
-                title
-                id
-                imageWithFallback {
-                    url(size: 50)
-                }
-                persons {
-                    name
-                }
-                duration
-                recordingDate
+                ...SermonsFragment
+                ...SermonFragment
             }
             pageInfo {
                 hasNextPage
@@ -27,6 +19,35 @@ query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
                 count
             }
         }
+    }
+}
+
+fragment SermonsFragment on AVORG_Recording {
+    id
+    title
+    imageWithFallback {
+        url(size: 50)
+    }
+    persons {
+        name
+    }
+    duration
+    recordingDate
+}
+
+fragment SermonFragment on AVORG_Recording {
+    id
+    title
+    persons {
+        name
+    }
+    audioFiles {
+        url
+    }
+    recordingDate
+    description
+    imageWithFallback {
+        url(size: 50)
     }
 }`
 
@@ -38,7 +59,7 @@ const createPagesByLang = async (
     const pages = await queries.getPages(
         graphql,
         query,
-        {language: langKey},
+        {language: langKey, first: queries.NUM_PER_PAGE},
         'data.avorg.sermons'
     )
 
@@ -48,18 +69,26 @@ const createPagesByLang = async (
             nodes = _.get(page, 'nodes'),
             pageNumber = i + 1
 
-        return createPage({
-            path: `${baseUrl}/sermons/page/${pageNumber}`,
-            component: path.resolve(`./src/templates/sermons.js`),
-            context: {
-                pagination: {
-                    total: Math.ceil(sermonCount / 10),
-                    current: pageNumber
-                },
-                lang: baseUrl,
-                nodes
-            }
-        })
+        return Promise.all([
+            createPage({
+                path: `${baseUrl}/sermons/page/${pageNumber}`,
+                component: path.resolve(`./src/templates/sermons.js`),
+                context: {
+                    pagination: {
+                        total: Math.ceil(sermonCount / 10),
+                        current: pageNumber
+                    },
+                    lang: baseUrl,
+                    nodes
+                }
+            }),
+            ...nodes.map(node => createPage({
+                    path: `${baseUrl}/sermons/${_.get(node, 'id')}`,
+                    component: path.resolve(`./src/templates/sermon.js`),
+                    context: {node}
+                })
+            )
+        ]);
     }))
 }
 
