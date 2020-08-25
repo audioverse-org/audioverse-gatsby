@@ -1,10 +1,9 @@
 import React from "react"
 import Layout from "../components/layout"
 import './sermon.scss'
-import {graphql} from "gatsby";
 
-export default function Sermon({ data }) {
-    const sermon = data.avorg.sermon,
+export default function Sermon({ pageContext }) {
+    const sermon = pageContext.node,
         imageSrc = sermon.imageWithFallback.url,
         imageAlt = sermon.title;
 
@@ -34,24 +33,3 @@ export default function Sermon({ data }) {
         </Layout>
     )
 }
-
-export const query = graphql`
-    query ($id: ID!) {
-        avorg {
-            sermon(id: $id) {
-                title
-                persons {
-                    name
-                }
-                audioFiles {
-                    url
-                }
-                recordingDate
-                description
-                imageWithFallback {
-                    url(size: 50)
-                }
-            }
-        }
-    }
-`

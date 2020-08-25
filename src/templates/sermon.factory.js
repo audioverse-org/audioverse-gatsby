@@ -9,6 +9,18 @@ query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
     sermons(language: $language, first: 50, after: $cursor, orderBy: {direction: DESC, field: CREATED_AT}) {
       nodes {
         id
+        title
+        persons {
+            name
+        }
+        audioFiles {
+            url
+        }
+        recordingDate
+        description
+        imageWithFallback {
+            url(size: 50)
+        }
       }
       pageInfo {
         hasNextPage
@@ -35,7 +47,7 @@ const createSermon = async (createPage, node, pathPrefix) => {
     await createPage({
         path: `${pathPrefix}/sermons/${nodeId}`,
         component: path.resolve(`./src/templates/sermon.js`),
-        context: {id: nodeId}
+        context: {node}
     })
 }
 

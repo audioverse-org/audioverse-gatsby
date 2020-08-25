@@ -7,6 +7,18 @@ const query = `
 query loadPagesQuery($language: AVORG_Language!, $cursor: String) {
     avorg {
         sermons(language: $language, after: $cursor, orderBy: {direction: DESC, field: CREATED_AT}) {
+            nodes {
+                title
+                id
+                imageWithFallback {
+                    url(size: 50)
+                }
+                persons {
+                    name
+                }
+                duration
+                recordingDate
+            }
             pageInfo {
                 hasNextPage
                 endCursor
@@ -33,7 +45,7 @@ const createPagesByLang = async (
     await Promise.all(pages.map((page, i) => {
         const baseUrl = constants.languages[langKey].base_url,
             sermonCount = _.get(page, 'aggregate.count', 0),
-            cursor = _.get(page, 'pageInfo.endCursor'),
+            nodes = _.get(page, 'nodes'),
             pageNumber = i + 1
 
         return createPage({
@@ -44,8 +56,8 @@ const createPagesByLang = async (
                     total: Math.ceil(sermonCount / 10),
                     current: pageNumber
                 },
-                language: langKey,
-                cursor
+                lang: baseUrl,
+                nodes
             }
         })
     }))

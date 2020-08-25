@@ -49,14 +49,14 @@ describe("sermon factory", () => {
     it("defines query variables", async () => {
         const {graphql} = await testCreatePages()
 
-        expect(graphql.mock.calls[0][0]).toContain("loadPagesQuery($language: AVORG_Language!, $cursor: String)")
+        expect(graphql.mock.calls[0][0])
+            .toContain("loadPagesQuery($language: AVORG_Language!, $cursor: String)")
     })
 
-    it("passes id to page", async () => {
-        const {createPage} = await testCreatePages([{
-            'id': 'the_id'
-        }])
+    it("passes node to page", async () => {
+        const {createPage} = await testCreatePages([{'the':'node'}])
 
-        expect(createPage.mock.calls[0][0].context.id).toEqual('the_id')
+        expect(createPage.mock.calls[0][0].context.node)
+            .toStrictEqual({'the':'node'})
     })
 })

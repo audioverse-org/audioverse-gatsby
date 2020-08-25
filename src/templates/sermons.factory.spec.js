@@ -175,19 +175,18 @@ describe("sermons factory", () => {
         })
     })
 
-    it("passes language to page", async () => {
-        const {createPage} = await testCreatePages()
-
-        expect(createPage.mock.calls[0][0].context.language)
-            .toEqual("ENGLISH")
-    })
-
-    it("passes cursor to page", async () => {
+    it("passes nodes to page", async () => {
         const {createPage} = await testCreatePages({
-            returnValue: {data:{avorg:{sermons:{pageInfo:{endCursor:"the_cursor"}}}}}
+            returnValue: {data:{avorg:{sermons:{nodes:[{'the':'node'}]}}}}
         })
 
-        expect(createPage.mock.calls[0][0].context.cursor)
-            .toEqual("the_cursor")
+        expect(createPage.mock.calls[0][0].context.nodes)
+            .toStrictEqual([{'the':'node'}])
+    })
+
+    it("passes nodes to page", async () => {
+        const {createPage} = await testCreatePages()
+
+        expect(createPage.mock.calls[0][0].context.lang).toEqual('en')
     })
 })
