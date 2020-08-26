@@ -42,8 +42,8 @@ fragment SermonFragment on AVORG_Recording {
     audioFiles {
         url
     }
-    recordingDate
     description
+    recordingDate
     imageWithFallback {
         url(size: 50)
     }
