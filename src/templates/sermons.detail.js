@@ -1,8 +1,8 @@
 import React from "react"
 import Layout from "../components/layout"
-import './sermon.scss'
+import './sermons.detail.scss'
 
-export default function Sermon({ pageContext }) {
+export default function SermonsDetail({ pageContext }) {
     const sermon = pageContext.node,
         imageSrc = sermon.imageWithFallback.url,
         imageAlt = sermon.title;

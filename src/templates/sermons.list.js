@@ -1,11 +1,11 @@
 import React from "react"
 import Layout from "../components/layout"
-import './sermons.scss'
+import './sermons.list.scss'
 import Pagination from "../components/molecules/pagination"
 import moment from "moment";
 import {getSermonPath} from "../helpers/paths";
 
-export default function Sermons({pageContext}) {
+export default function SermonsList({pageContext}) {
     const {nodes, lang} = pageContext,
         {total, current} = pageContext.pagination;
 

@@ -1,7 +1,7 @@
 import {describe, expect, it, jest} from "@jest/globals";
 import {render} from "@testing-library/react"
 import React from "react";
-import Sermons from "./sermons";
+import SermonsList from "./sermons.list";
 import Layout from "../components/layout"
 
 jest.mock("../components/layout")
@@ -10,7 +10,7 @@ Layout.mockImplementation(({children}) => <>{children}</>)
 
 describe("sermons component", () => {
     it("hides next when unneeded", () => {
-        const {getByText} = render(<Sermons pageContext={{
+        const {getByText} = render(<SermonsList pageContext={{
             nodes: [],
             pagination: {
                 current: 1,
@@ -22,7 +22,7 @@ describe("sermons component", () => {
     })
 
     it("uses pagination total", () => {
-        const {getByText} = render(<Sermons pageContext={{
+        const {getByText} = render(<SermonsList pageContext={{
             nodes: [],
             pagination: {
                 current: 1,
@@ -40,7 +40,7 @@ describe("sermons component", () => {
     })
 
     it("highlights active page", () => {
-        const {getByText} = render(<Sermons pageContext={{
+        const {getByText} = render(<SermonsList pageContext={{
             nodes: [],
             pagination: {
                 current: 3,
@@ -60,7 +60,7 @@ describe("sermons component", () => {
     })
 
     it("links to pages", () => {
-        const {getByText} = render(<Sermons pageContext={{
+        const {getByText} = render(<SermonsList pageContext={{
             nodes: [],
             pagination: {
                 current: 3,
