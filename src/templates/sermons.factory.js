@@ -43,10 +43,10 @@ fragment SermonFragment on AVORG_Recording {
         url
     }
     description
-    recordingDate
     imageWithFallback {
         url(size: 50)
     }
+    recordingDate
 }`
 
 const createPagesByLang = async (
