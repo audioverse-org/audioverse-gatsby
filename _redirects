@@ -1,0 +1,23 @@
+# Slug Rewrites
+
+## Recordings
+
+/en/sermons/:id/:slug   /en/sermons/:id     200
+/es/sermons/:id/:slug   /es/sermons/:id     200
+/de/sermons/:id/:slug   /de/sermons/:id     200
+/fr/sermons/:id/:slug   /fr/sermons/:id     200
+/zh/sermons/:id/:slug   /zg/sermons/:id     200
+/ja/sermons/:id/:slug   /ja/sermons/:id     200
+/ru/sermons/:id/:slug   /ru/sermons/:id     200
+
+# Legacy
+
+## Recordings
+
+/english/sermons/recordings/:id/:slug               /en/sermons/:id/:slug
+/espanol/sermones/grabaciones/:id/:slug             /es/sermons/:id/:slug
+/deutsch/sermons/recordings/:id/:slug               /de/sermons/:id/:slug
+/francais/predications/enregistrements/:id/:slug    /fr/sermons/:id/:slug
+/zhongwen/sermons/recordings/:id/:slug              /zh/sermons/:id/:slug
+/ja/sermons/recordings/:id/:slug                    /ja/sermons/:id/:slug
+/ru/sermons/recordings/:id/:slug                    /ru/sermons/:id/:slug
