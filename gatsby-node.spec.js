@@ -10,10 +10,7 @@ describe("gatsby node", () => {
             data: {
                 avorg: {
                     sermons: {
-                        nodes: [],
-                        pageInfo: {
-                            hasNextPage: false
-                        }
+                        nodes: [{}]
                     }
                 }
             }
@@ -25,6 +22,6 @@ describe("gatsby node", () => {
 
         await createPages(args)
 
-        expect(path.resolve).toBeCalledWith(`./src/templates/sermons.js`)
+        expect(path.resolve).toBeCalledWith(`./src/templates/sermons.list.js`)
     })
 })

@@ -1,30 +1,28 @@
 const _ = require(`lodash`),
     constants = require(`../constants`)
 
-// Must include pageInfo.hasNextPage and pageInfo.endCursor in generated queries
-exports.getPages = async (graphql, query, queryArgs, pageSelector, cursor = null, pages = []) => {
-    queryArgs.cursor = cursor
+const NUM_PER_PAGE = 250;
 
+exports.NUM_PER_PAGE = NUM_PER_PAGE;
+
+// Required in query:
+//   pageInfo.hasNextPage
+//   pageInfo.endCursor
+//   aggregate.count
+exports.getPages = async (graphql, query, queryArgs, pageSelector) => {
     const result = await graphql(query, queryArgs),
-        page = _.get(result, pageSelector)
+        page = _.get(result, pageSelector),
+        pages = [page],
+        pageCount = Math.ceil(_.get(page, 'aggregate.count') / NUM_PER_PAGE),
+        maxPage = Math.min(pageCount, constants.query_page_limit)
 
-    pages.push(page)
+    if (!page) return [];
+    if (!maxPage || maxPage < 1) return pages;
 
-    const hasNextPage = _.get(page, 'pageInfo.hasNextPage') &&
-        pages.length < constants.query_page_limit
-
-    if (hasNextPage) {
-        const nextCursor = _.get(page, 'pageInfo.endCursor')
-
-        return exports.getPages(
-            graphql,
-            query,
-            queryArgs,
-            pageSelector,
-            nextCursor,
-            pages
-        )
-    }
+    pages.push(...await Promise.all(_.range(1, maxPage).map(i => graphql(query, {
+        ...queryArgs,
+        cursor: Buffer.from(i * NUM_PER_PAGE + 1 + '').toString('base64')
+    }).then(result => _.get(result, pageSelector)))));
 
     return pages
 }
